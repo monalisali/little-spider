@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         trustAllHosts();
 
-       // 广度优先搜索
+        // 广度优先搜索
         Queue<NewsWithRelated> newsQueue = new LinkedList<NewsWithRelated>();
 
         String startUrl = "https://readhub.me/topic/5bMmlAm75lD";
@@ -59,20 +59,20 @@ public class Main {
     private static void trustAllHosts() {
 
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[] {};
+                return new java.security.cert.X509Certificate[]{};
             }
 
-            public void checkClientTrusted(X509Certificate[] chain, String authType)  {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
 
             }
 
             public void checkServerTrusted(X509Certificate[] chain, String authType) {
 
             }
-        } };
+        }};
 
         // Install the all-trusting trust manager
         try {
