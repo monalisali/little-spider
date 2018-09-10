@@ -5,6 +5,11 @@ import com.xiedaimala.spider.model.UrlNewsReader;
 import com.xiedaimala.spider.model.Viewable;
 import com.xiedaimala.spider.view.ListViewer;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 import java.util.*;
 
 public class Main {
@@ -19,6 +24,8 @@ public class Main {
     static final int maximumURL = 10;
 
     public static void main(String[] args) throws Exception {
+        trustAllHosts();
+
        // 广度优先搜索
         Queue<NewsWithRelated> newsQueue = new LinkedList<NewsWithRelated>();
 
@@ -45,6 +52,36 @@ public class Main {
         }
 
         new ListViewer(results).display();
+    }
+
+
+    //没有这个方法的话会报错： unable to find valid certification path to requested target
+    private static void trustAllHosts() {
+
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return new java.security.cert.X509Certificate[] {};
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain, String authType)  {
+
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+
+            }
+        } };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
